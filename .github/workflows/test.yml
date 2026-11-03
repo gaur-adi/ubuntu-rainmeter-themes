@@ -1,0 +1,28 @@
+name: Test
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install test dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-gi gir1.2-pango-1.0 libglib2.0-bin gnome-shell-common gsettings-desktop-schemas
+      - name: Verify pinned extension and prepare isolated schemas
+        run: |
+          /usr/bin/python3 - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          spec = importlib.util.spec_from_file_location('manager', 'scripts/theme_manager.py')
+          manager = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(manager)
+          manager.checked_download(manager.EXTENSION_URL, Path('/tmp/desktop-widgets.zip'), manager.EXTENSION_SHA)
+          manager.extract_extension('/tmp/desktop-widgets.zip', '/tmp/desktop-widgets')
+          PY
+          glib-compile-schemas --strict /tmp/desktop-widgets/schemas
+      - name: Run tests without touching desktop settings
+        env:
+          GSETTINGS_BACKEND: memory
+          URT_TEST_EXTENSION: /tmp/desktop-widgets
+        run: /usr/bin/python3 -m unittest discover -s tests -v

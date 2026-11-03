@@ -1,0 +1,17 @@
+{
+  "id": "solo-leveling",
+  "name": "Solo Leveling",
+  "description": "Sung Jin-Woo with a day/date/time stack, local weather and live system statistics.",
+  "wallpaper": {
+    "url": "https://cdn.wallpapersafari.com/34/29/8NpjeV.jpg",
+    "sha256": "376092f517fe130ff8ad18665407db8d65c8521b40beb94c934e8cf3c1289dba",
+    "source": "https://wallpapersafari.com/w/8NpjeV",
+    "credit": "Wallpaper credit in image: Joshua Cayetano. Solo Leveling characters belong to their respective owners. No artwork license is granted by this project."
+  },
+  "font": "Lato",
+  "accent": "#dd554d",
+  "foreground": "#ffffff",
+  "muted": "#acb8c5",
+  "clock_position": [0.18, 0.40],
+  "stats_position": [0.34, 0.39]
+}
