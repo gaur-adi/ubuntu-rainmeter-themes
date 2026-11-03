@@ -20,9 +20,11 @@ cd ubuntu-rainmeter-themes
 
 ### Solo Leveling
 
-[![Solo Leveling wallpaper](https://cdn.wallpapersafari.com/34/29/8NpjeV.jpg)](https://wallpapersafari.com/w/8NpjeV)
+![Solo Leveling theme preview with day, date, time, weather, CPU, RAM, GPU, temperature and VRAM](themes/solo-leveling/preview.png)
 
-*Background artwork preview; the live widgets are added during installation.* Artwork credit appears in the image: Joshua Cayetano. [Wallpaper source](https://wallpapersafari.com/w/8NpjeV).
+**Complete layout preview** — rendered from the theme settings with sample readings. After installation, the clock, weather and hardware measurements update live on each connected display. Font rendering and spacing can vary with display scaling.
+
+Artwork credit: Joshua Cayetano. [Original wallpaper source](https://wallpapersafari.com/w/8NpjeV).
 
 - Sung Jin-Woo wallpaper matching the reference design.
 - Spaced day name, date, and a live clock with red separators.
@@ -123,7 +125,7 @@ Copy `themes/solo-leveling/` to a new kebab-case folder, then update `theme.json
 - Choose font and hex colors; use an installed font.
 - Set clock/statistics positions as fractions of the monitor dimensions, from `0` to `1`.
 
-Use a wallpaper you may use and share, and document its license. This repository downloads the current example wallpaper to the user's machine rather than redistributing the image in Git. Link availability and third-party rights remain separate from the code license.
+Use a wallpaper you may use and share, and document its license. The installer downloads the original wallpaper to the user's machine. Documentation includes a reduced-resolution layout preview containing the credited artwork. Link availability and third-party rights remain separate from the code license.
 
 Check a wallpaper checksum with:
 
