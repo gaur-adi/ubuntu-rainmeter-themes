@@ -157,6 +157,10 @@ URT_TEST_EXTENSION="$HOME/.local/share/gnome-shell/extensions/azclock@azclock.gi
 
 GitHub Actions verifies the pinned extension checksum and runs these tests in isolation. Tests cover unsafe downloads/archive paths, repeated installs in the schema layer, preserving existing widgets, display counts, weather failure caching, and missing GPU reporting.
 
+## Contributing
+
+Fork the repository, create a branch, and open a pull request into `main`. Changes require passing tests and maintainer approval. See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete workflow and new-theme requirements.
+
 ## Credits and license
 
 Installer and collector code: [MIT](LICENSE). [Credits and third-party licensing](CREDITS.md) cover Desktop Widgets, weather/location services, font, and wallpaper. The MIT license grants no rights to anime characters, wallpaper artwork, or third-party extension code.
