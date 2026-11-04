@@ -84,6 +84,7 @@ export default class ThemeExtension extends Extension {
         this._stopAudio();
         for (const menu of this._menus) { menu.close(); menu.destroy(); }
         this._menus = [];
+        this._menuManagers = [];
         for (const {actor} of this._actors) { Main.layoutManager.removeChrome(actor); actor.destroy(); }
         this._actors = [];
         this._updates = [];
@@ -109,7 +110,11 @@ export default class ThemeExtension extends Extension {
             for (const kind of ['hardware', 'media', 'weather', 'trash', 'headlines']) this._collect(kind);
             if (theme.widgets.some(widget => widget.type === 'visualizer')) this._startAudio();
             this._visibility();
-        } catch (error) { console.error(`[Ubuntu Rainmeter Themes] ${error.message}`); }
+        } catch (error) {
+            this._clear();
+            console.error(`[Ubuntu Rainmeter Themes] ${error.stack || error.message}`);
+            Main.notifyError('Ubuntu Rainmeter Themes', `Widgets could not load: ${error.message}`);
+        }
     }
 
     _collect(kind) {
@@ -173,8 +178,10 @@ export default class ThemeExtension extends Extension {
         const y = monitor.y + Math.max(spec.type === 'menubar' ? Main.panel.height : 0, spec.y * monitor.height);
         actor.set_position(Math.round(x), Math.round(y));
         const interactive = ['media', 'apps', 'menubar', 'notes', 'timer', 'volume', 'trash', 'search'].includes(spec.type);
-        Main.layoutManager.addChrome(actor, {affectsInputRegion: interactive, trackFullscreen: true});
+        // GNOME 50 removed affectsInputRegion; reactive child actors handle input.
+        // Keep only options shared by every supported GNOME version.
         this._actors.push({actor, spec, monitor, interactive});
+        Main.layoutManager.addChrome(actor, {trackFullscreen: true});
         const font = spec.font || this._theme.font;
         const label = (text, size, options = {}) => this._label(actor, text, size * scale, {color: spec.foreground || this._theme.foreground, ...options, font: options.font || font});
         const track = callback => { this._updates.push(callback); callback(); };
