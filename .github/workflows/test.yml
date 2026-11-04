@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install test dependencies
-        run: sudo apt-get update && sudo apt-get install -y python3-gi gir1.2-pango-1.0 libglib2.0-bin gnome-shell-common gsettings-desktop-schemas
+        run: sudo apt-get update && sudo apt-get install -y gjs python3-gi gir1.2-pango-1.0 libglib2.0-bin gnome-shell-common gsettings-desktop-schemas
       - name: Verify pinned extension and prepare isolated schemas
         run: |
           /usr/bin/python3 - <<'PY'
@@ -26,3 +26,9 @@ jobs:
           GSETTINGS_BACKEND: memory
           URT_TEST_EXTENSION: /tmp/desktop-widgets
         run: /usr/bin/python3 -m unittest discover -s tests -v
+      - name: Parse native GNOME module
+        run: >-
+          gjs -c 'let [ok,b]=imports.gi.GLib.file_get_contents(ARGV[0]);
+          Reflect.parse(new TextDecoder().decode(b), {target:"module"});
+          print("Native module syntax passed");'
+          native/ubuntu-rainmeter-themes@gaur-adi/extension.js

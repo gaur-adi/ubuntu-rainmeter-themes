@@ -1,0 +1,84 @@
+{
+  "id": "jaxcore",
+  "name": "JaxCore \u00b7 ModularClocks",
+  "description": "Reference-based Ubuntu GNOME adaptation with live native widgets.",
+  "engine": "native",
+  "reference": {
+    "creator": "Jax",
+    "source": "https://github.com/Jax-Core/Modularclocks",
+    "preview": "https://raw.githubusercontent.com/Jax-Core/ReadME-Template/main/Resources/Splash/ModularClocks.png",
+    "checked": "2026-11-03",
+    "fidelity": "Independent reference-based adaptation; not a pixel-identical or complete Windows suite port.",
+    "notes": [
+      "Recreates the stacked ModularClocks composition with weather, a ModularPlayers-style player and app shortcuts.",
+      "JaxCore is a framework with many unrelated modules. Windows flyouts, mixers, ValliStart and its module-update/settings hub are not cloned."
+    ]
+  },
+  "wallpaper": {
+    "mode": "bundled",
+    "file": "wallpaper.png",
+    "sha256": "c877c0ad5319d4dd0b43424e492eb6b628d5ac65176173ef55ee17efc8cdc4c5",
+    "source": "../../docs/wallpaper-prompts.md",
+    "credit": "Original AI-generated wallpaper created for this repository with OpenAI image_gen, 2026-11-03."
+  },
+  "font": "Lato",
+  "accent": "#90b7d5",
+  "foreground": "#f4f6f8",
+  "muted": "#b9c2cb",
+  "clock_position": [
+    0.18,
+    0.4
+  ],
+  "stats_position": [
+    0.34,
+    0.39
+  ],
+  "native": {
+    "font": "Lato",
+    "foreground": "#f4f6f8",
+    "muted": "#b9c2cb",
+    "accent": "#90b7d5",
+    "widgets": [
+      {
+        "type": "clock",
+        "x": 0.73,
+        "y": 0.23,
+        "width": 380,
+        "height": 620,
+        "font": "Roboto Thin",
+        "format": "%H\n%M",
+        "size": 218,
+        "caption": "%A, %B %d",
+        "caption_size": 21
+      },
+      {
+        "type": "weather",
+        "x": 0.05,
+        "y": 0.36,
+        "width": 300,
+        "height": 200,
+        "size": 52
+      },
+      {
+        "type": "media",
+        "x": 0.05,
+        "y": 0.66,
+        "width": 480,
+        "height": 190,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)",
+        "size": 27
+      },
+      {
+        "type": "apps",
+        "x": 0.36,
+        "y": 0.91,
+        "width": 650,
+        "height": 90,
+        "icon_size": 42
+      }
+    ]
+  }
+}

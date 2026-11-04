@@ -1,0 +1,65 @@
+{
+  "id": "monstercat",
+  "name": "Monstercat Visualizer",
+  "description": "Reference-based Ubuntu GNOME adaptation with live native widgets.",
+  "engine": "native",
+  "reference": {
+    "creator": "MarcoPixel",
+    "source": "https://github.com/marcopixel/monstercat-visualizer",
+    "preview": "https://i.imgur.com/cu1R235.png",
+    "checked": "2026-11-03",
+    "fidelity": "Independent reference-based adaptation; not a pixel-identical or complete Windows suite port.",
+    "notes": [
+      "The white spectrum is driven by real system playback through CAVA. Track metadata and Previous/Play/Pause/Next use MPRIS.",
+      "Original Rainmeter player plug-ins and per-genre/album color extraction are not ported. Remote album-art fetching is not included."
+    ]
+  },
+  "wallpaper": {
+    "mode": "bundled",
+    "file": "wallpaper.png",
+    "sha256": "d806a3d093a00063a2734b9da6bbfc740f8d929666e636f7ba4e32aadbee4b5d",
+    "source": "../../docs/wallpaper-prompts.md",
+    "credit": "Original AI-generated wallpaper created for this repository with OpenAI image_gen, 2026-11-03."
+  },
+  "font": "Lato",
+  "accent": "#ffffff",
+  "foreground": "#f4f6f8",
+  "muted": "#b9c2cb",
+  "clock_position": [
+    0.18,
+    0.4
+  ],
+  "stats_position": [
+    0.34,
+    0.39
+  ],
+  "native": {
+    "font": "Lato",
+    "foreground": "#f4f6f8",
+    "muted": "#b9c2cb",
+    "accent": "#ffffff",
+    "widgets": [
+      {
+        "type": "visualizer",
+        "x": 0.16,
+        "y": 0.3,
+        "width": 1300,
+        "height": 300,
+        "bar_gap": 4,
+        "palette": [
+          "#ffffff"
+        ],
+        "peaks": false
+      },
+      {
+        "type": "media",
+        "x": 0.16,
+        "y": 0.61,
+        "width": 1300,
+        "height": 220,
+        "size": 42,
+        "artist_size": 24
+      }
+    ]
+  }
+}

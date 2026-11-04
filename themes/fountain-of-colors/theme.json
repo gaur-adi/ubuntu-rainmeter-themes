@@ -1,0 +1,60 @@
+{
+  "id": "fountain-of-colors",
+  "name": "Fountain of Colors",
+  "description": "Reference-based Ubuntu GNOME adaptation with live native widgets.",
+  "engine": "native",
+  "reference": {
+    "creator": "alatsombath",
+    "source": "https://www.deviantart.com/alatsombath/art/Fountain-of-Colors-desktop-music-visualizer-518894563",
+    "preview": "https://www.deviantart.com/alatsombath/art/Fountain-of-Colors-desktop-music-visualizer-518894563",
+    "checked": "2026-11-03",
+    "fidelity": "Independent reference-based adaptation; not a pixel-identical or complete Windows suite port.",
+    "notes": [
+      "The 80 live FFT bars and fading peaks use CAVA\u2019s system-playback monitor.",
+      "Default palette follows the current creator preview. Rainmeter\u2019s full settings skin and wallpaper-color extraction are replaced by editable theme data."
+    ]
+  },
+  "wallpaper": {
+    "mode": "bundled",
+    "file": "wallpaper.png",
+    "sha256": "c6dc775989b2782dfca7b5757f98ac3950ed1aa6e9bb6f7d216db7244ada6c1a",
+    "source": "../../docs/wallpaper-prompts.md",
+    "credit": "Original AI-generated wallpaper created for this repository with OpenAI image_gen, 2026-11-03."
+  },
+  "font": "Lato",
+  "accent": "#c746c7",
+  "foreground": "#f4f6f8",
+  "muted": "#b9c2cb",
+  "clock_position": [
+    0.18,
+    0.4
+  ],
+  "stats_position": [
+    0.34,
+    0.39
+  ],
+  "native": {
+    "font": "Lato",
+    "foreground": "#f4f6f8",
+    "muted": "#b9c2cb",
+    "accent": "#c746c7",
+    "widgets": [
+      {
+        "type": "visualizer",
+        "x": 0.12,
+        "y": 0.29,
+        "width": 1460,
+        "height": 440,
+        "bar_gap": 5,
+        "palette": [
+          "#a83db6",
+          "#b542c1",
+          "#c743c8",
+          "#d548cb",
+          "#cf45be"
+        ],
+        "peaks": true
+      }
+    ]
+  }
+}

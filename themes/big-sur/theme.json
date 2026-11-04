@@ -1,0 +1,228 @@
+{
+  "id": "big-sur",
+  "name": "Big Sur 26",
+  "description": "Reference-based Ubuntu GNOME adaptation with live native widgets.",
+  "engine": "native",
+  "reference": {
+    "creator": "fediaFedia",
+    "source": "https://www.deviantart.com/fediafedia/art/Big-Sur-BETA-3-for-Rainmeter-846882462",
+    "preview": "https://www.deviantart.com/fediafedia/art/Big-Sur-BETA-3-for-Rainmeter-846882462",
+    "checked": "2026-11-03",
+    "fidelity": "Independent reference-based adaptation; not a pixel-identical or complete Windows suite port.",
+    "notes": [
+      "Includes the Big Sur 26-style centered glass-card grid, analog/digital clocks, calendar, weather, launcher, media, meters, timer, volume, notes and news.",
+      "Cards have translucent backgrounds; proprietary Windows blur and full application-specific panels are not ported. App icons come from programs installed on Ubuntu."
+    ]
+  },
+  "wallpaper": {
+    "mode": "bundled",
+    "file": "wallpaper.png",
+    "sha256": "d09453f7437cffe31dbc03bc0600318940d7f4e8b29e3f8fdb2107ed2736a4d3",
+    "source": "../../docs/wallpaper-prompts.md",
+    "credit": "Original AI-generated wallpaper created for this repository with OpenAI image_gen, 2026-11-03."
+  },
+  "font": "Lato",
+  "accent": "#ff9a2e",
+  "foreground": "#f4f6f8",
+  "muted": "#b9c2cb",
+  "clock_position": [
+    0.18,
+    0.4
+  ],
+  "stats_position": [
+    0.34,
+    0.39
+  ],
+  "native": {
+    "font": "Lato",
+    "foreground": "#f4f6f8",
+    "muted": "#b9c2cb",
+    "accent": "#ff9a2e",
+    "widgets": [
+      {
+        "type": "analog",
+        "x": 0.28,
+        "y": 0.09,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)"
+      },
+      {
+        "type": "weather",
+        "x": 0.4,
+        "y": 0.09,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "size": 37,
+        "city_size": 14,
+        "detail_size": 13
+      },
+      {
+        "type": "apps",
+        "x": 0.52,
+        "y": 0.1,
+        "width": 450,
+        "height": 180,
+        "labels": true,
+        "icon_size": 49
+      },
+      {
+        "type": "calendar",
+        "x": 0.28,
+        "y": 0.3,
+        "width": 440,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "size": 17,
+        "title_size": 24
+      },
+      {
+        "type": "media",
+        "x": 0.52,
+        "y": 0.3,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "size": 20,
+        "artist_size": 13
+      },
+      {
+        "type": "stats",
+        "x": 0.64,
+        "y": 0.3,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "rows": [
+          "cpu",
+          "ram",
+          "disk"
+        ],
+        "size": 14
+      },
+      {
+        "type": "timer",
+        "x": 0.28,
+        "y": 0.51,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "size": 36
+      },
+      {
+        "type": "volume",
+        "x": 0.4,
+        "y": 0.51,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)"
+      },
+      {
+        "type": "apps",
+        "x": 0.52,
+        "y": 0.51,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "labels": true,
+        "icon_size": 50,
+        "apps": [
+          "com.spotify.Client.desktop"
+        ]
+      },
+      {
+        "type": "stats",
+        "x": 0.64,
+        "y": 0.51,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "rows": [
+          "battery",
+          "gpu",
+          "temperature"
+        ],
+        "size": 14
+      },
+      {
+        "type": "notes",
+        "x": 0.28,
+        "y": 0.72,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)"
+      },
+      {
+        "type": "headlines",
+        "x": 0.4,
+        "y": 0.72,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "title": "Top Stories",
+        "size": 14,
+        "count": 2
+      },
+      {
+        "type": "search",
+        "x": 0.52,
+        "y": 0.72,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)"
+      },
+      {
+        "type": "clock",
+        "x": 0.64,
+        "y": 0.72,
+        "width": 210,
+        "height": 210,
+        "padding": 16,
+        "radius": 30,
+        "background": "rgba(38,59,32,0.60)",
+        "border": "rgba(255,255,255,0.22)",
+        "format": "<span foreground=\"#ff9a2e\">%H:%M</span>",
+        "size": 50,
+        "weight": 700
+      }
+    ]
+  },
+  "rss_url": "https://feeds.bbci.co.uk/news/rss.xml"
+}

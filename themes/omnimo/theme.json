@@ -1,0 +1,134 @@
+{
+  "id": "omnimo",
+  "name": "Omnimo 10",
+  "description": "Reference-based Ubuntu GNOME adaptation with live native widgets.",
+  "engine": "native",
+  "reference": {
+    "creator": "fediaFedia / Omnimo contributors",
+    "source": "https://github.com/fediaFedia/Omnimo",
+    "preview": "https://visualskins.com/skin/omnimo-10",
+    "checked": "2026-11-03",
+    "fidelity": "Independent reference-based adaptation; not a pixel-identical or complete Windows suite port.",
+    "notes": [
+      "Combines the large clock/date composition with the reference\u2019s white hardware tiles, weather, headlines and application shortcuts.",
+      "This is a selected composition of Omnimo modules, not the complete hundreds-panel library, Microsoft-account integration or Windows-specific settings."
+    ]
+  },
+  "wallpaper": {
+    "mode": "bundled",
+    "file": "wallpaper.png",
+    "sha256": "01955d0af4fe32a863429cd3c2a45c6b9dd5201735d26a030c5354fdeb66a6de",
+    "source": "../../docs/wallpaper-prompts.md",
+    "credit": "Original AI-generated wallpaper created for this repository with OpenAI image_gen, 2026-11-03."
+  },
+  "font": "Lato",
+  "accent": "#2e819a",
+  "foreground": "#f4f6f8",
+  "muted": "#b9c2cb",
+  "clock_position": [
+    0.18,
+    0.4
+  ],
+  "stats_position": [
+    0.34,
+    0.39
+  ],
+  "native": {
+    "font": "Lato",
+    "foreground": "#f4f6f8",
+    "muted": "#b9c2cb",
+    "accent": "#2e819a",
+    "widgets": [
+      {
+        "type": "clock",
+        "x": 0.25,
+        "y": 0.15,
+        "width": 960,
+        "height": 240,
+        "format": "%H:%M",
+        "size": 150,
+        "weight": 600,
+        "caption": "%A, %B %d",
+        "caption_size": 38,
+        "muted": "#ffffff"
+      },
+      {
+        "type": "stats",
+        "x": 0.25,
+        "y": 0.47,
+        "width": 230,
+        "height": 225,
+        "padding": 22,
+        "background": "rgba(248,249,250,0.93)",
+        "foreground": "#20252a",
+        "rows": [
+          "ram"
+        ],
+        "size": 22,
+        "bars": true
+      },
+      {
+        "type": "stats",
+        "x": 0.38,
+        "y": 0.47,
+        "width": 230,
+        "height": 225,
+        "padding": 22,
+        "background": "rgba(248,249,250,0.93)",
+        "foreground": "#20252a",
+        "rows": [
+          "disk"
+        ],
+        "size": 22,
+        "bars": true
+      },
+      {
+        "type": "stats",
+        "x": 0.51,
+        "y": 0.47,
+        "width": 230,
+        "height": 225,
+        "padding": 22,
+        "background": "rgba(248,249,250,0.93)",
+        "foreground": "#20252a",
+        "rows": [
+          "cpu",
+          "gpu"
+        ],
+        "size": 21,
+        "bars": true
+      },
+      {
+        "type": "weather",
+        "x": 0.64,
+        "y": 0.47,
+        "width": 230,
+        "height": 225,
+        "padding": 22,
+        "background": "rgba(248,249,250,0.93)",
+        "foreground": "#20252a",
+        "size": 46,
+        "city_size": 15,
+        "detail_size": 14
+      },
+      {
+        "type": "headlines",
+        "x": 0.25,
+        "y": 0.73,
+        "width": 730,
+        "height": 170,
+        "size": 20,
+        "count": 3
+      },
+      {
+        "type": "apps",
+        "x": 0.25,
+        "y": 0.92,
+        "width": 970,
+        "height": 70,
+        "icon_size": 35
+      }
+    ]
+  },
+  "rss_url": "https://feeds.bbci.co.uk/news/rss.xml"
+}

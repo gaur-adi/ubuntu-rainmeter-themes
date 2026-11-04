@@ -1,0 +1,151 @@
+{
+  "id": "monterey",
+  "name": "Monterey",
+  "description": "Reference-based Ubuntu GNOME adaptation with live native widgets.",
+  "engine": "native",
+  "reference": {
+    "creator": "creewick; reference composition by Legend0804",
+    "source": "https://github.com/creewick/MontereyRainmeter",
+    "preview": "https://www.deviantart.com/legend0804/art/MacOS-Monterey-for-Windows-952714758",
+    "checked": "2026-11-03",
+    "fidelity": "Independent reference-based adaptation; not a pixel-identical or complete Windows suite port.",
+    "notes": [
+      "Includes clock, calendar, five-day weather, hardware meters, music controls, timer, volume and persistent notes.",
+      "The cards use translucent fills; Windows blur plug-ins and OS styling are replaced with GNOME-native widgets."
+    ]
+  },
+  "wallpaper": {
+    "mode": "bundled",
+    "file": "wallpaper.png",
+    "sha256": "17d3f57d561e9240addf028215eb4b7e67279a9aac8f8519cfd2dd50c2db470c",
+    "source": "../../docs/wallpaper-prompts.md",
+    "credit": "Original AI-generated wallpaper created for this repository with OpenAI image_gen, 2026-11-03."
+  },
+  "font": "Lato",
+  "accent": "#ef6b80",
+  "foreground": "#f4f6f8",
+  "muted": "#b9c2cb",
+  "clock_position": [
+    0.18,
+    0.4
+  ],
+  "stats_position": [
+    0.34,
+    0.39
+  ],
+  "native": {
+    "font": "Lato",
+    "foreground": "#f4f6f8",
+    "muted": "#b9c2cb",
+    "accent": "#ef6b80",
+    "widgets": [
+      {
+        "type": "clock",
+        "x": 0.77,
+        "y": 0.05,
+        "width": 355,
+        "height": 175,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)",
+        "format": "%H:%M<span size=\"18000\"> %S</span>",
+        "size": 61,
+        "caption": "%A, %B %d",
+        "caption_size": 18
+      },
+      {
+        "type": "calendar",
+        "x": 0.57,
+        "y": 0.23,
+        "width": 355,
+        "height": 240,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)",
+        "size": 17,
+        "title_size": 25
+      },
+      {
+        "type": "weather",
+        "x": 0.77,
+        "y": 0.23,
+        "width": 355,
+        "height": 350,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)",
+        "size": 49,
+        "forecast": true
+      },
+      {
+        "type": "stats",
+        "x": 0.57,
+        "y": 0.47,
+        "width": 355,
+        "height": 345,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)",
+        "rows": [
+          "cpu",
+          "ram",
+          "disk",
+          "network",
+          "battery"
+        ],
+        "size": 16,
+        "bars": true
+      },
+      {
+        "type": "media",
+        "x": 0.77,
+        "y": 0.57,
+        "width": 355,
+        "height": 175,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)",
+        "size": 22
+      },
+      {
+        "type": "notes",
+        "x": 0.77,
+        "y": 0.75,
+        "width": 355,
+        "height": 180,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)"
+      },
+      {
+        "type": "timer",
+        "x": 0.57,
+        "y": 0.81,
+        "width": 170,
+        "height": 145,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)",
+        "size": 27
+      },
+      {
+        "type": "volume",
+        "x": 0.667,
+        "y": 0.81,
+        "width": 170,
+        "height": 145,
+        "padding": 18,
+        "radius": 22,
+        "background": "rgba(35,33,42,0.86)",
+        "border": "rgba(255,255,255,0.10)"
+      }
+    ]
+  }
+}
