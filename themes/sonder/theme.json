@@ -1,0 +1,129 @@
+{
+  "id": "sonder",
+  "name": "Sonder",
+  "description": "Reference-based Ubuntu GNOME adaptation with live native widgets.",
+  "engine": "native",
+  "reference": {
+    "creator": "Michael Purses",
+    "source": "https://github.com/mpurses/Sonder",
+    "preview": "https://raw.githubusercontent.com/mpurses/Sonder/master/Plugins/Screenshots/Sonder-v21.11.png",
+    "checked": "2026-11-03",
+    "fidelity": "Independent reference-based adaptation; not a pixel-identical or complete Windows suite port.",
+    "notes": [
+      "Includes the thin split-color clock, world map, calendar, five-day forecast and system meters.",
+      "The geographic map uses public-domain Natural Earth data. The day/night shading is approximate; city-light overlays and the original audio visualizer are not included.",
+      "Brightness/Bluetooth and wallpaper/settings menus remain available through GNOME\u2019s system controls."
+    ]
+  },
+  "wallpaper": {
+    "mode": "bundled",
+    "file": "wallpaper.png",
+    "sha256": "dd63b3488542238d40dcfa516f145877d1db954d76d159e4b5f636ddcab18eeb",
+    "source": "../../docs/wallpaper-prompts.md",
+    "credit": "Original AI-generated wallpaper created for this repository with OpenAI image_gen, 2026-11-03."
+  },
+  "font": "Lato",
+  "accent": "#699b73",
+  "foreground": "#f4f6f8",
+  "muted": "#b9c2cb",
+  "clock_position": [
+    0.18,
+    0.4
+  ],
+  "stats_position": [
+    0.34,
+    0.39
+  ],
+  "native": {
+    "font": "Lato",
+    "foreground": "#f4f6f8",
+    "muted": "#b9c2cb",
+    "accent": "#699b73",
+    "widgets": [
+      {
+        "type": "clock",
+        "x": 0.32,
+        "y": 0.07,
+        "width": 700,
+        "height": 230,
+        "font": "Roboto Thin",
+        "format": "%H<span foreground=\"#699b73\">%M</span>",
+        "size": 175,
+        "caption": "%A | %B %d %Y",
+        "caption_size": 31
+      },
+      {
+        "type": "worldmap",
+        "x": 0.28,
+        "y": 0.35,
+        "width": 850,
+        "height": 350
+      },
+      {
+        "type": "weather",
+        "x": 0.82,
+        "y": 0.04,
+        "width": 315,
+        "height": 270,
+        "size": 42,
+        "forecast": true,
+        "detail_size": 16
+      },
+      {
+        "type": "calendar",
+        "x": 0.82,
+        "y": 0.34,
+        "width": 315,
+        "height": 280,
+        "title_size": 54,
+        "size": 18,
+        "title_font": "Allura",
+        "month_format": "%B"
+      },
+      {
+        "type": "volume",
+        "x": 0.84,
+        "y": 0.72,
+        "width": 250,
+        "height": 80
+      },
+      {
+        "type": "stats",
+        "x": 0.84,
+        "y": 0.81,
+        "width": 270,
+        "height": 150,
+        "rows": [
+          "cpu",
+          "ram",
+          "gpu"
+        ],
+        "size": 13,
+        "bars": true
+      },
+      {
+        "type": "trash",
+        "x": 0.92,
+        "y": 0.95,
+        "width": 130,
+        "height": 45
+      }
+    ]
+  },
+  "fonts": [
+    {
+      "file": "Roboto-Thin.ttf",
+      "url": "https://raw.githubusercontent.com/mpurses/Sonder/master/Skins/Sonder/%40Resources/Fonts/Roboto-Thin.ttf",
+      "sha256": "dcac562815b575e6b821bae5fd245fea6590bb3b597fd5b96eae6acccb21d03c",
+      "license": "Apache-2.0; Google Roboto",
+      "source": "https://github.com/googlefonts/roboto"
+    },
+    {
+      "file": "Allura.otf",
+      "url": "https://raw.githubusercontent.com/mpurses/Sonder/master/Skins/Sonder/%40Resources/Fonts/Allura.otf",
+      "sha256": "6010068f94a534fb57e95b7d8200e90694b8600bdfead400cb1e795c7da680b7",
+      "license": "SIL Open Font License 1.1",
+      "source": "https://github.com/google/fonts/tree/main/ofl/allura"
+    }
+  ]
+}

@@ -17,6 +17,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 UUID = 'azclock@azclock.gitlab.com'
+NATIVE_UUID = 'ubuntu-rainmeter-themes@gaur-adi'
 SCHEMA = 'org.gnome.shell.extensions.azclock'
 SETTINGS_PATH = '/org/gnome/shell/extensions/azclock/'
 PREFIX = 'urt-'
@@ -47,11 +48,38 @@ def validate_theme(theme):
         if len(position) != 2 or any(not isinstance(v, (int, float)) or not math.isfinite(v) or not 0 <= v <= 1 for v in position):
             raise ValueError('Positions must be two normalized coordinates')
     image = theme['wallpaper']
-    if not image['url'].startswith('https://') or not re.fullmatch('[0-9a-f]{64}', image['sha256']):
+    if image.get('mode') != 'preserve' and (not re.fullmatch('[0-9a-f]{64}', image['sha256']) or
+            (image.get('mode') != 'bundled' and not image['url'].startswith('https://'))):
         raise ValueError('Wallpaper requires an HTTPS URL and SHA-256 checksum')
     if not isinstance(theme['font'], str) or not theme['font'].strip():
         raise ValueError('Theme must specify a font')
+    if theme.get('engine') == 'native':
+        validate_native(theme['native'])
     return theme
+
+
+ALLOWED_WIDGETS = {'panel', 'clock', 'analog', 'worldmap', 'calendar', 'weather', 'stats', 'media', 'apps',
+                   'menubar', 'notes', 'timer', 'volume', 'trash', 'headlines', 'search', 'visualizer'}
+
+
+def validate_native(native):
+    widgets = native.get('widgets')
+    if not isinstance(widgets, list) or not 1 <= len(widgets) <= 40:
+        raise ValueError('Native themes need between 1 and 40 widgets')
+    for widget in widgets:
+        if widget.get('type') not in ALLOWED_WIDGETS:
+            raise ValueError('Unknown native widget type')
+        for name in ('x', 'y'):
+            value = widget.get(name)
+            if not isinstance(value, (int, float)) or not math.isfinite(value) or not 0 <= value <= 1:
+                raise ValueError('Native positions must be normalized coordinates')
+        for name in ('width', 'height'):
+            value = widget.get(name)
+            if not isinstance(value, (int, float)) or not math.isfinite(value) or not 1 <= value <= 4000:
+                raise ValueError('Invalid native widget dimensions')
+        if widget.get('type') == 'stats' and any(row not in {'cpu', 'ram', 'gpu', 'temperature', 'disk', 'network', 'battery', 'uptime'} for row in widget.get('rows', [])):
+            raise ValueError('Unknown hardware statistic')
+    return native
 
 
 def load_theme(name):
@@ -116,13 +144,15 @@ def dependencies(install=False):
     except (ImportError, ValueError):
         missing = True
     if missing:
+        if os.environ.get('URT_DEPS_REEXEC') == '1':
+            raise RuntimeError('Required desktop dependencies remain unavailable after package installation. Check your Ubuntu/GNOME installation.')
         command = ['sudo', 'apt-get', 'install', '-y', *PACKAGES]
         if not install:
             raise RuntimeError('Missing Ubuntu dependencies. Run with --install-deps, or:\n' + shlex.join(command))
         subprocess.run(['sudo', 'apt-get', 'update'], check=True)
         subprocess.run(command, check=True)
         # The parent Python may have cached missing typelib lookups. Re-exec cleanly.
-        os.execv('/usr/bin/python3', ['/usr/bin/python3', __file__, *[a for a in sys.argv[1:] if a != '--install-deps']])
+        os.execve('/usr/bin/python3', ['/usr/bin/python3', __file__, *sys.argv[1:]], {**os.environ, 'URT_DEPS_REEXEC': '1'})
 
 
 def preflight(install_deps=False):
@@ -252,18 +282,21 @@ def write_json(path, data):
 
 def install(args):
     theme = load_theme(args.theme)
+    if theme.get('engine') == 'native':
+        return install_native(args, theme)
     version = preflight(args.install_deps and not args.dry_run)
     data, extension = paths()
     count = monitor_count()
     weather_mode = 'auto' if args.auto_location else 'city' if args.city else 'off'
     if args.dry_run:
         print(json.dumps({'theme': theme['id'], 'gnome': version, 'displays': count,
-            'weather': weather_mode, 'wallpaper': theme['wallpaper']['url'],
+            'weather': weather_mode, 'wallpaper': theme['wallpaper'].get('url', theme['wallpaper'].get('mode')),
             'widgets': layout(theme, count, data / 'metrics.py', weather_mode)}, indent=2))
         return
     data.mkdir(parents=True, exist_ok=True)
-    image = data / 'wallpapers' / (theme['id'] + '.jpg')
-    checked_download(theme['wallpaper']['url'], image, theme['wallpaper']['sha256'])
+    image = choose_wallpaper(theme, data, getattr(args, 'wallpaper', None))
+    if image is None:
+        raise ValueError('Desktop Widgets themes require a wallpaper')
     if not extension.exists():
         archive = data / 'desktop-widgets-v21.zip'
         checked_download(EXTENSION_URL, archive, EXTENSION_SHA, max_bytes=8_000_000)
@@ -296,15 +329,17 @@ def install(args):
     try:
         shutil.copy2(ROOT / 'runtime/metrics.py', data / 'metrics.py')
         config = {key: theme[key] for key in ('id', 'accent', 'muted', 'foreground')}
-        config.update(weather=weather_mode, city=args.city, wallpaper_uri=image.as_uri())
+        config.update(weather=weather_mode, city=args.city, wallpaper_uri=image.as_uri(), engine='desktop-widgets')
         write_json(data / 'active.json', config)
         apply_layout(settings, theme, layout(theme, count, data / 'metrics.py', weather_mode))
         for key in ('picture-uri', 'picture-uri-dark'):
             background.set_string(key, image.as_uri())
         background.set_string('picture-options', 'zoom')
-        enabled = shell.get_strv('enabled-extensions')
+        enabled = [value for value in shell.get_strv('enabled-extensions') if value != NATIVE_UUID]
         if UUID not in enabled:
             shell.set_strv('enabled-extensions', [*enabled, UUID])
+        else:
+            shell.set_strv('enabled-extensions', enabled)
         Gio.Settings.sync()
     except Exception:
         subprocess.run(['dconf', 'reset', '-f', SETTINGS_PATH], check=True)
@@ -332,6 +367,118 @@ def install(args):
     print('Undo with: ./uninstall.sh')
 
 
+def choose_wallpaper(theme, data, override=None):
+    if override:
+        source = Path(override).expanduser().resolve()
+        if not source.is_file() or source.suffix.lower() not in {'.jpg', '.jpeg', '.png', '.webp', '.svg'}:
+            raise ValueError('--wallpaper must point to a local supported image')
+        target = data / 'wallpapers' / (theme['id'] + '-custom' + source.suffix.lower())
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+        return target
+    image = theme['wallpaper']
+    if image.get('mode') == 'preserve':
+        return None
+    if image.get('mode') == 'bundled':
+        source = (ROOT / 'themes' / theme['id'] / image['file']).resolve()
+        source.relative_to((ROOT / 'themes' / theme['id']).resolve())
+        if hashlib.sha256(source.read_bytes()).hexdigest() != image['sha256']:
+            raise ValueError('Bundled wallpaper checksum mismatch')
+        target = data / 'wallpapers' / (theme['id'] + source.suffix)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+        return target
+    target = data / 'wallpapers' / (theme['id'] + '.jpg')
+    checked_download(image['url'], target, image['sha256'])
+    return target
+
+
+def install_native(args, theme):
+    version = preflight(args.install_deps and not args.dry_run)
+    metadata = json.loads((ROOT / 'native' / NATIVE_UUID / 'metadata.json').read_text())
+    if version not in metadata['shell-version']:
+        raise RuntimeError(f'The native launcher/audio engine currently targets GNOME {metadata["shell-version"]}. Your version is {version}. Solo Leveling still uses Desktop Widgets.')
+    count = monitor_count()
+    if args.dry_run:
+        print(json.dumps({'theme': theme['id'], 'engine': 'native', 'gnome': version, 'displays': count,
+            'wallpaper': theme['wallpaper'], 'widgets': theme['native']['widgets']}, indent=2))
+        return
+    audio = any(widget['type'] == 'visualizer' for widget in theme['native']['widgets'])
+    missing = [name for name in (['cava', 'pactl'] if audio else []) if not shutil.which(name)]
+    if any(widget['type'] == 'volume' for widget in theme['native']['widgets']) and not shutil.which('wpctl'):
+        missing.append('wpctl')
+    if missing:
+        packages = (['cava', 'pulseaudio-utils'] if audio else []) + (['wireplumber'] if 'wpctl' in missing else [])
+        command = ['sudo', 'apt-get', 'install', '-y', *packages]
+        if not args.install_deps:
+            raise RuntimeError('Missing native widget tools: ' + ', '.join(missing) + '. Run with --install-deps, or:\n' + shlex.join(command))
+        subprocess.run(command, check=True)
+    from gi.repository import Gio, GLib
+    data, legacy = paths()
+    data.mkdir(parents=True, exist_ok=True)
+    image = choose_wallpaper(theme, data, getattr(args, 'wallpaper', None))
+    background = Gio.Settings.new('org.gnome.desktop.background')
+    shell = Gio.Settings.new('org.gnome.shell')
+    original_enabled = shell.get_strv('enabled-extensions')
+    native_path = data_home() / 'gnome-shell/extensions' / NATIVE_UUID
+    native_path.parent.mkdir(parents=True, exist_ok=True)
+    backup = data / 'backup.json'
+    old_wallpaper = {key: background.get_string(key) for key in ('picture-uri', 'picture-uri-dark', 'picture-options')}
+    old_tree = subprocess.check_output(['dconf', 'dump', SETTINGS_PATH], text=True)
+    old_active = (data / 'active.json').read_bytes() if (data / 'active.json').exists() else None
+    if not backup.exists():
+        initial = get_settings(legacy)().get_boolean('create-initial-widget') if legacy.exists() else True
+        write_json(backup, {'wallpaper': old_wallpaper, 'extension_enabled': UUID in original_enabled,
+            'native_enabled': NATIVE_UUID in original_enabled, 'initial_widget': initial})
+        (data / 'before-install.dconf').write_text(old_tree)
+    try:
+        shutil.copytree(ROOT / 'native' / NATIVE_UUID, native_path, dirs_exist_ok=True)
+        for script in ('metrics.py', 'bridge.py', 'audio.py'):
+            shutil.copy2(ROOT / 'runtime' / script, data / script)
+        config = {key: theme[key] for key in ('id', 'accent', 'muted', 'foreground')}
+        config.update(engine='native', native=theme['native'],
+            weather='auto' if args.auto_location else 'city' if args.city else 'off', city=args.city,
+            wallpaper_uri=image.as_uri() if image else None,
+            rss_url=getattr(args, 'rss_url', None) or theme.get('rss_url'))
+        if legacy.exists():
+            main = get_settings(legacy)()
+            main.set_value('widgets', GLib.Variant('aa{sv}', non_theme_entries(main.get_value('widgets'))))
+        # Load fonts only from theme-declared, checksum-pinned HTTPS sources.
+        font_dir = data_home() / 'fonts/ubuntu-rainmeter-themes'
+        for font in theme.get('fonts', []):
+            if not re.fullmatch(r'[A-Za-z0-9_.-]+\.(?:otf|ttf)', font['file']):
+                raise ValueError('Invalid font filename')
+            checked_download(font['url'], font_dir / font['file'], font['sha256'], max_bytes=8_000_000)
+        if theme.get('fonts') and shutil.which('fc-cache'):
+            subprocess.run(['fc-cache', '-f', str(font_dir)], check=True)
+        write_json(data / 'active.json', config)
+        if image:
+            for key in ('picture-uri', 'picture-uri-dark'):
+                background.set_string(key, image.as_uri())
+            background.set_string('picture-options', 'zoom')
+        if NATIVE_UUID not in original_enabled:
+            shell.set_strv('enabled-extensions', [*original_enabled, NATIVE_UUID])
+        Gio.Settings.sync()
+    except Exception:
+        subprocess.run(['dconf', 'reset', '-f', SETTINGS_PATH], check=True)
+        subprocess.run(['dconf', 'load', SETTINGS_PATH], input=old_tree, text=True, check=True)
+        for key, value in old_wallpaper.items():
+            background.set_string(key, value)
+        shell.set_strv('enabled-extensions', original_enabled)
+        if old_active is None:
+            (data / 'active.json').unlink(missing_ok=True)
+        else:
+            (data / 'active.json').write_bytes(old_active)
+        Gio.Settings.sync()
+        raise
+    subprocess.run(['gnome-extensions', 'enable', NATIVE_UUID], capture_output=True, text=True)
+    print(f'Applied {theme["name"]} using native GNOME widgets on {count} display(s).')
+    print('First native-engine installation or code update: log out and sign in again. Later theme switches reload live.')
+    if image is None:
+        print('This component keeps your wallpaper. Use --wallpaper /path/to/image.jpg to select a background.')
+    print('Undo with: ./uninstall.sh')
+
+
 def uninstall(args):
     preflight(False)
     data, extension = paths()
@@ -344,13 +491,15 @@ def uninstall(args):
         return
     from gi.repository import Gio, GLib
     saved = json.loads(backup.read_text())
-    settings = get_settings(extension)
-    main = settings()
-    raw = main.get_value('widgets')
-    owned = [key for entry in raw.unpack() for key in entry if key.startswith(PREFIX)]
-    entries = non_theme_entries(raw)
-    main.set_value('widgets', GLib.Variant('aa{sv}', entries))
-    main.set_boolean('create-initial-widget', saved['initial_widget'])
+    owned, entries = [], []
+    if extension.exists():
+        settings = get_settings(extension)
+        main = settings()
+        raw = main.get_value('widgets')
+        owned = [key for entry in raw.unpack() for key in entry if key.startswith(PREFIX)]
+        entries = non_theme_entries(raw)
+        main.set_value('widgets', GLib.Variant('aa{sv}', entries))
+        main.set_boolean('create-initial-widget', saved['initial_widget'])
     active = json.loads((data / 'active.json').read_text()) if (data / 'active.json').exists() else {}
     background = Gio.Settings.new('org.gnome.desktop.background')
     restored = False
@@ -364,6 +513,9 @@ def uninstall(args):
     if not saved['extension_enabled'] and not entries:
         shell = Gio.Settings.new('org.gnome.shell')
         shell.set_strv('enabled-extensions', [x for x in shell.get_strv('enabled-extensions') if x != UUID])
+    if not saved.get('native_enabled', False):
+        shell = Gio.Settings.new('org.gnome.shell')
+        shell.set_strv('enabled-extensions', [x for x in shell.get_strv('enabled-extensions') if x != NATIVE_UUID])
     Gio.Settings.sync()
     for wid in owned:
         subprocess.run(['dconf', 'reset', '-f', SETTINGS_PATH + 'widget-data/' + wid + '/'], check=True)
@@ -371,7 +523,8 @@ def uninstall(args):
     shutil.copy2(backup, data / 'last-uninstall-backup.json')
     backup.unlink()
     (data / 'active.json').unlink(missing_ok=True)
-    (data / 'metrics.py').unlink(missing_ok=True)
+    for script in ('metrics.py', 'bridge.py', 'audio.py'):
+        (data / script).unlink(missing_ok=True)
     print('Theme removed. Other widgets and extensions were preserved. Shared extension and downloaded artwork remain installed.')
 
 
@@ -381,6 +534,8 @@ def main():
     parser.add_argument('--list', action='store_true', help='list available themes')
     parser.add_argument('--dry-run', action='store_true', help='inspect plan without downloads or desktop changes')
     parser.add_argument('--install-deps', action='store_true', help='install missing Ubuntu packages using sudo apt')
+    parser.add_argument('--wallpaper', help='use your own local wallpaper image')
+    parser.add_argument('--rss-url', help='HTTPS RSS/Atom feed for news widgets')
     parser.add_argument('--uninstall', action='store_true', help='remove managed widgets and restore wallpaper')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--auto-location', action='store_true', help='use IP-based approximate city for weather')

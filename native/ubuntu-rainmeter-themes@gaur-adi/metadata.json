@@ -1,0 +1,14 @@
+{
+  "uuid": "ubuntu-rainmeter-themes@gaur-adi",
+  "name": "Ubuntu Rainmeter Themes",
+  "description": "Native desktop theme widgets, application menus, MPRIS controls and CAVA audio visualizers.",
+  "shell-version": [
+    "46",
+    "47",
+    "48",
+    "49",
+    "50"
+  ],
+  "version": 1,
+  "url": "https://github.com/gaur-adi/ubuntu-rainmeter-themes"
+}

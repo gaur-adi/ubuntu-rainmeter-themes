@@ -1,0 +1,156 @@
+{
+  "id": "enigma",
+  "name": "Enigma",
+  "description": "Reference-based Ubuntu GNOME adaptation with live native widgets.",
+  "engine": "native",
+  "reference": {
+    "creator": "Kaelri and contributors",
+    "source": "https://github.com/Kaelri/Enigma",
+    "preview": "https://static.beebom.com/wp-content/uploads/2019/01/enigma-theme.jpg",
+    "checked": "2026-11-03",
+    "fidelity": "Independent reference-based adaptation; not a pixel-identical or complete Windows suite port.",
+    "notes": [
+      "Includes information sidebars, an analog clock, calendar, notes, current system/network readings, weather, media, headlines and application shortcuts.",
+      "The source suite\u2019s process-specific charts, image-gallery slideshow and Windows tray integration are not implemented."
+    ]
+  },
+  "wallpaper": {
+    "mode": "bundled",
+    "file": "wallpaper.png",
+    "sha256": "bed5301306ab46af49c57c29c883852727643dd3d263ad7f41f2deade237e23f",
+    "source": "../../docs/wallpaper-prompts.md",
+    "credit": "Original AI-generated wallpaper created for this repository with OpenAI image_gen, 2026-11-03."
+  },
+  "font": "Lato",
+  "accent": "#a8c9cf",
+  "foreground": "#f4f6f8",
+  "muted": "#b9c2cb",
+  "clock_position": [
+    0.18,
+    0.4
+  ],
+  "stats_position": [
+    0.34,
+    0.39
+  ],
+  "native": {
+    "font": "Lato",
+    "foreground": "#f4f6f8",
+    "muted": "#b9c2cb",
+    "accent": "#a8c9cf",
+    "widgets": [
+      {
+        "type": "panel",
+        "x": 0.01,
+        "y": 0.04,
+        "width": 265,
+        "height": 980,
+        "background": "rgba(8,14,17,0.76)"
+      },
+      {
+        "type": "panel",
+        "x": 0.85,
+        "y": 0.04,
+        "width": 270,
+        "height": 980,
+        "background": "rgba(8,14,17,0.76)"
+      },
+      {
+        "type": "menubar",
+        "x": 0,
+        "y": 0,
+        "width": 1920,
+        "height": 43,
+        "background": "rgba(9,13,16,0.9)"
+      },
+      {
+        "type": "calendar",
+        "x": 0.02,
+        "y": 0.08,
+        "width": 235,
+        "height": 260,
+        "size": 16,
+        "title_size": 23
+      },
+      {
+        "type": "stats",
+        "x": 0.02,
+        "y": 0.4,
+        "width": 235,
+        "height": 230,
+        "rows": [
+          "cpu",
+          "ram",
+          "disk",
+          "network"
+        ],
+        "size": 14,
+        "bars": true
+      },
+      {
+        "type": "headlines",
+        "x": 0.02,
+        "y": 0.66,
+        "width": 235,
+        "height": 275,
+        "title": "Top Stories",
+        "size": 14,
+        "count": 4
+      },
+      {
+        "type": "analog",
+        "x": 0.38,
+        "y": 0.28,
+        "width": 460,
+        "height": 460
+      },
+      {
+        "type": "clock",
+        "x": 0.86,
+        "y": 0.09,
+        "width": 235,
+        "height": 110,
+        "format": "%H:%M",
+        "size": 42,
+        "caption": "%A, %B %d",
+        "caption_size": 14
+      },
+      {
+        "type": "notes",
+        "x": 0.86,
+        "y": 0.25,
+        "width": 235,
+        "height": 170
+      },
+      {
+        "type": "weather",
+        "x": 0.86,
+        "y": 0.44,
+        "width": 235,
+        "height": 295,
+        "size": 40,
+        "forecast": true,
+        "forecast_size": 13,
+        "detail_size": 14
+      },
+      {
+        "type": "media",
+        "x": 0.86,
+        "y": 0.76,
+        "width": 235,
+        "height": 190,
+        "size": 18,
+        "artist_size": 14
+      },
+      {
+        "type": "apps",
+        "x": 0.2,
+        "y": 0.93,
+        "width": 1160,
+        "height": 65,
+        "icon_size": 28
+      }
+    ]
+  },
+  "rss_url": "https://feeds.bbci.co.uk/news/rss.xml"
+}
