@@ -215,6 +215,11 @@ def layout(theme, count, runtime, weather_mode):
     return widgets
 
 
+def is_theme_widget(name):
+    """Include IDs reserved by the original pre-repository Solo setup."""
+    return name.startswith(PREFIX) or re.fullmatch(r'solo-(?:clock|stats)-[0-9]+', name) is not None
+
+
 def non_theme_entries(raw):
     """Keep original GVariant values intact rather than unpacking/repacking variants."""
     entries = []
@@ -224,7 +229,7 @@ def non_theme_entries(raw):
         for item in range(child.n_children()):
             pair = child.get_child_value(item)
             name = pair.get_child_value(0).get_string()
-            if not name.startswith(PREFIX):
+            if not is_theme_widget(name):
                 entry[name] = pair.get_child_value(1).get_variant()
         if entry:
             entries.append(entry)
@@ -496,7 +501,7 @@ def uninstall(args):
         settings = get_settings(extension)
         main = settings()
         raw = main.get_value('widgets')
-        owned = [key for entry in raw.unpack() for key in entry if key.startswith(PREFIX)]
+        owned = [key for entry in raw.unpack() for key in entry if is_theme_widget(key)]
         entries = non_theme_entries(raw)
         main.set_value('widgets', GLib.Variant('aa{sv}', entries))
         main.set_boolean('create-initial-widget', saved['initial_widget'])

@@ -22,6 +22,12 @@ metrics = module('metrics', ROOT / 'runtime/metrics.py')
 
 
 class ManagerTests(unittest.TestCase):
+    def test_original_solo_widget_ids_are_owned_but_custom_widgets_are_not(self):
+        for name in ('solo-clock-0', 'solo-stats-12', 'urt-mond-clock-0'):
+            self.assertTrue(manager.is_theme_widget(name))
+        for name in ('solo-custom', 'solo-clock-personal', 'my-clock', 'solo-stats-0-copy'):
+            self.assertFalse(manager.is_theme_widget(name))
+
     def test_theme_name_cannot_escape_theme_directory(self):
         for name in ('../private', '/tmp', 'solo-leveling/../../x', 'bad name'):
             with self.assertRaises(ValueError):
@@ -86,13 +92,16 @@ class SchemaIntegrationTests(unittest.TestCase):
         from gi.repository import GLib
         settings = manager.get_settings(Path(os.environ['URT_TEST_EXTENSION']))
         original = {'user-widget': GLib.Variant('a{sv}', {'enabled': GLib.Variant('b', True)})}
-        settings().set_value('widgets', GLib.Variant('aa{sv}', [original]))
+        settings().set_value('widgets', GLib.Variant('aa{sv}', [original,
+            manager.enabled_entry('solo-clock-0'), manager.enabled_entry('solo-stats-0'),
+            manager.enabled_entry('solo-clock-2'), manager.enabled_entry('solo-stats-2')]))
         theme = manager.load_theme('solo-leveling')
         for count in (3, 3, 1):
             manager.apply_layout(settings, theme, manager.layout(theme, count, Path('/home/a user/metrics.py'), 'auto'))
             widgets = settings().get_value('widgets').unpack()
             ids = [key for item in widgets for key in item]
             self.assertIn('user-widget', ids)
+            self.assertFalse(any(name.startswith(('solo-clock-', 'solo-stats-')) for name in ids))
             self.assertEqual(len(ids), 1 + 2 * count)
             self.assertEqual(len(ids), len(set(ids)))
         # Emulate uninstall's list removal, preserving the original untouched entry.
